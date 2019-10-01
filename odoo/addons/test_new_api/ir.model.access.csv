@@ -15,6 +15,7 @@ access_mixed,test_new_api_mixed,test_new_api.model_test_new_api_mixed,,1,1,1,1
 access_domain_bool,access_domain_bool,model_domain_bool,,1,1,1,1
 access_test_new_api_foo,access_test_new_api_foo,model_test_new_api_foo,,1,1,1,1
 access_test_new_api_bar,access_test_new_api_bar,model_test_new_api_bar,,1,1,1,1
+access_test_new_api_baz,access_test_new_api_baz,model_test_new_api_baz,,1,1,1,1
 access_test_new_api_related,access_test_new_api_related,model_test_new_api_related,,1,1,1,1
 access_test_new_api_company,access_test_new_api_company,model_test_new_api_company,,1,1,1,1
 access_test_new_api_company_attr,access_test_new_api_company_attr,model_test_new_api_company_attr,,1,1,1,1
