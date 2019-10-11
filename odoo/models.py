@@ -5210,6 +5210,8 @@ Record ids: %(records)s
                             data = data.mapped('display_name')
                         else:
                             data = data and data.ids or [False]
+                            if isinstance(v, BaseModel):
+                                value = [v.id]
                     elif field and field.type in ('date', 'datetime'):
                         # convert all date and datetime values to datetime
                         normalize = Datetime.to_datetime
