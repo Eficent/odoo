@@ -2539,11 +2539,11 @@ class BaseModel(MetaModel('DummyModel', (object,), {'_register': False})):
             self._cr.execute(query, (value,))
 
     @ormcache()
-    def _table_has_rows(self):
-        """ Return whether the model's table has rows. This method should only
-            be used when updating the database schema (:meth:`~._auto_init`).
+    def _table_has_null_rows(self, column_name):
+        """ Return whether the model's table has rows with null values in column_name.
+        This method should only be used when updating the database schema (:meth:`~._auto_init`).
         """
-        self.env.cr.execute('SELECT 1 FROM "%s" LIMIT 1' % self._table)
+        self.env.cr.execute('SELECT 1 FROM "%s" WHERE "%s" IS NULL LIMIT 1' % (self._table, column_name))
         return self.env.cr.rowcount
 
     def _auto_init(self):
