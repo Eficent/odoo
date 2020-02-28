@@ -675,3 +675,76 @@ class TestComputeOnchange(common.TransactionCase):
         form.foo = "foo6"
         self.assertEqual(form.bar, "foo6")
         self.assertEqual(form.baz, "baz5")
+
+
+class TestComputeOnchangeAbstract(common.TransactionCase):
+
+    def test_set_new(self):
+        model = self.env['test_new_api.compute.onchange.abstract']
+        record = model.new({'active': True, 'foo': "foo"})
+        self.assertEqual(record.bar, "foo")
+        self.assertEqual(record.baz, "foo")
+
+        # recompute 'bar' and 'baz'
+        record.foo = "foo1"
+        self.assertEqual(record.bar, "foo1")
+        self.assertEqual(record.baz, "foo1")
+
+        # do not recompute 'baz'
+        record.baz = "baz2"
+        self.assertEqual(record.bar, "foo1")
+        self.assertEqual(record.baz, "baz2")
+
+        # recompute 'baz', but do not change its value
+        record.active = False
+        self.assertEqual(record.bar, "foo1")
+        self.assertEqual(record.baz, "baz2")
+
+        # recompute 'baz', but do not change its value
+        record.foo = "foo3"
+        self.assertEqual(record.bar, "foo3")
+        self.assertEqual(record.baz, "baz2")
+
+        # do not recompute 'baz'
+        record.baz = "baz4"
+        self.assertEqual(record.bar, "foo3")
+        self.assertEqual(record.baz, "baz4")
+
+    def test_onchange(self):
+        form = common.Form(self.env['test_new_api.compute.onchange.abstract'])
+        form.active = True
+        form.foo = "foo1"
+        self.assertEqual(form.bar, "foo1")
+        self.assertEqual(form.baz, "foo1")
+        form.baz = "baz2"
+        self.assertEqual(form.bar, "foo1")
+        self.assertEqual(form.baz, "baz2")
+        form.active = False
+        self.assertEqual(form.bar, "foo1")
+        self.assertEqual(form.baz, "baz2")
+        form.foo = "foo3"
+        self.assertEqual(form.bar, "foo3")
+        self.assertEqual(form.baz, "baz2")
+        form.active = True
+        self.assertEqual(form.bar, "foo3")
+        self.assertEqual(form.baz, "foo3")
+
+        record = form.save()
+        self.assertEqual(record.bar, "foo3")
+        self.assertEqual(record.baz, "foo3")
+
+        form = common.Form(record)
+        self.assertEqual(form.bar, "foo3")
+        self.assertEqual(form.baz, "foo3")
+        form.foo = "foo4"
+        self.assertEqual(form.bar, "foo4")
+        self.assertEqual(form.baz, "foo4")
+        form.baz = "baz5"
+        self.assertEqual(form.bar, "foo4")
+        self.assertEqual(form.baz, "baz5")
+        form.active = False
+        self.assertEqual(form.bar, "foo4")
+        self.assertEqual(form.baz, "baz5")
+        form.foo = "foo6"
+        self.assertEqual(form.bar, "foo6")
+        self.assertEqual(form.baz, "baz5")

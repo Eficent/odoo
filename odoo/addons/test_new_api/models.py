@@ -518,6 +518,27 @@ class ComputeOnchange(models.Model):
                 record.baz = record.foo
 
 
+class ComputeOnchangeAbstract(models.AbstractModel):
+    _name = 'test_new_api.compute.onchange.abstract'
+    _description = "Compute method as an onchange on abstract model"
+
+    active = fields.Boolean()
+    foo = fields.Char()
+    bar = fields.Char(compute='_compute_bar', store=True)
+    baz = fields.Char(compute='_compute_baz', store=True, readonly=False)
+
+    @api.depends('foo')
+    def _compute_bar(self):
+        for record in self:
+            record.bar = record.foo
+
+    @api.depends('active', 'foo')
+    def _compute_baz(self):
+        for record in self:
+            if record.active:
+                record.baz = record.foo
+
+
 class ModelBinary(models.Model):
     _name = 'test_new_api.model_binary'
     _description = 'Test Image field'
